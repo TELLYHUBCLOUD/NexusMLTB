@@ -7,6 +7,7 @@
 **Channel 2:** [@mvxyoffcail](https://t.me/mvxyoffcail)
 
 ---
+https://colab.research.google.com/github/TELLYHUBCLOUD/NexusMLTB/blob/main/Heroku_Deploy.ipynb
 
 ## ✨ Features
 
