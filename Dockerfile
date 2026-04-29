@@ -26,4 +26,9 @@ COPY . .
 # Create downloads dir
 RUN mkdir -p /tmp/downloads
 
+# Heroku assigns PORT dynamically — expose it
+# For non-Heroku use, defaults to 8080
+ENV PORT=8080
+EXPOSE $PORT
+
 CMD ["python", "main.py"]

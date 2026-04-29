@@ -1,0 +1,8 @@
+# Heroku Docker deployment manifest
+# Use: heroku stack:set container
+build:
+  docker:
+    worker: Dockerfile
+
+run:
+  worker: python main.py

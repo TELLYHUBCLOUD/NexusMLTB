@@ -44,6 +44,11 @@ class Config:
     RCLONE_PATH      = os.environ.get("RCLONE_PATH", "rclone")
     RCLONE_CONFIG    = os.environ.get("RCLONE_CONFIG_PATH", "rclone.conf")
 
+    # Heroku
+    PORT             = int(os.environ.get("PORT", 8080))
+    HEROKU_APP_NAME  = os.environ.get("HEROKU_APP_NAME", "")
+    IS_HEROKU        = bool(os.environ.get("DYNO", ""))
+
     # All admins combined
     @classmethod
     def is_admin(cls, user_id: int) -> bool:

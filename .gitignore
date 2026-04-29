@@ -1,0 +1,65 @@
+# ── Environment & Secrets ─────────────────────────────────────────────────────
+.env
+*.env
+.env.*
+!.env.example
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── Virtual Environment ──────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# ── Credentials & Tokens ─────────────────────────────────────────────────────
+token.pickle
+*.pickle
+rclone.conf
+accounts/
+sa_*.json
+credentials.json
+
+# ── Downloads & Temp ──────────────────────────────────────────────────────────
+/tmp/
+downloads/
+*.torrent
+*.aria2
+
+# ── Session Files ─────────────────────────────────────────────────────────────
+*.session
+*.session-journal
+session_*.session
+
+# ── OS Files ──────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+docker-compose.override.yml
