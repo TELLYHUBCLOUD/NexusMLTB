@@ -33,6 +33,13 @@ except Exception as e:
     logger.warning(f"⚠️ aria2c not available: {e} — direct downloads disabled")
 
 
+# ── Debug: Log all messages ───────────────────────────────────────────────────
+@app.on_message(filters.private & ~filters.service)
+async def debug_log(client, message):
+    logger.info(f"📩 Received message from {message.from_user.id}: {message.text or '[Media]'}")
+    message.continue_propagation()
+
+
 # ── Heroku keep-alive web server ───────────────────────────────────────────────
 async def health_check(request):
     return web.Response(text="Mirror Nexus Bot is running! 💎", status=200)
