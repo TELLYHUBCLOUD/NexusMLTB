@@ -59,16 +59,20 @@ async def cancel_session_cb(client, cb):
     await cb.message.edit_text("❌ Session generation cancelled.")
 
 
-@app.on_message(filters.private & ~filters.command([
+@app.on_message(filters.private & filters.text & ~filters.command([
     "start", "help", "about", "info", "stats", "broadcast",
     "ban", "unban", "settings", "cancel", "mirror", "leech",
-    "status", "session"
-]))
+    "status", "session", "m", "l", "ytdl", "torrent", "gdl",
+    "mega", "nzb", "jd", "tgleech", "bulk_url", "upload",
+    "gdrive", "rclone", "gofile", "pixeldrain", "buzzheavier", "ytvideo",
+    "cancelall",
+]), group=2)
 async def session_conversation(client: Client, message: Message):
     user_id = message.from_user.id
     state   = _states.get(user_id)
     if not state:
-        return  # Not in session flow — pass to other handlers
+        message.continue_propagation()  # Not in session flow — let other handlers process
+        return
 
     step = state.get("step")
 

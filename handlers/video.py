@@ -31,7 +31,7 @@ def video_menu_kb(file_id: str) -> InlineKeyboardMarkup:
     ])
 
 
-@app.on_message(filters.video | filters.document)
+@app.on_message(filters.video)
 async def video_handler(client: Client, message: Message):
     media = message.video or message.document
     if not media:

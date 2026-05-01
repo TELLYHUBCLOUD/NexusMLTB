@@ -22,6 +22,7 @@ Path(Config.DOWNLOAD_DIR).mkdir(parents=True, exist_ok=True)
 
 # ── Import bot & handlers (registers all decorators) ──────────────────────────
 from bot.client import app
+from pyrogram import filters as _filters  # needed for debug handler below
 import handlers  # noqa: F401 — side-effect: registers all handlers
 
 # ── Aria2 connection (non-fatal if not running) ────────────────────────────────
@@ -33,8 +34,8 @@ except Exception as e:
     logger.warning(f"⚠️ aria2c not available: {e} — direct downloads disabled")
 
 
-# ── Debug: Log all messages ───────────────────────────────────────────────────
-@app.on_message(filters.private & ~filters.service)
+# ── Debug: Log all messages (group=-1 = runs first, then propagates) ──────────
+@app.on_message(_filters.private & ~_filters.service, group=-1)
 async def debug_log(client, message):
     logger.info(f"📩 Received message from {message.from_user.id}: {message.text or '[Media]'}")
     message.continue_propagation()

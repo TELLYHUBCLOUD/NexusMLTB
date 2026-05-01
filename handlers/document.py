@@ -5,6 +5,9 @@ from bot.client import app
 ARCHIVE_EXTS = {".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"}
 SUBTITLE_EXTS = {".srt", ".vtt", ".ass", ".sbv", ".sub"}
 JSON_EXTS = {".json"}
+VIDEO_EXTS = {".mp4", ".mkv", ".avi", ".webm", ".mov", ".m4v"}
+VIDEO_MIME = {"video/mp4", "video/x-matroska", "video/avi", "video/webm",
+              "video/x-msvideo", "video/quicktime", "video/3gpp"}
 
 
 def doc_menu_kb(file_id: str, doc_type: str) -> InlineKeyboardMarkup:
@@ -27,9 +30,21 @@ def doc_menu_kb(file_id: str, doc_type: str) -> InlineKeyboardMarkup:
 async def doc_handler(client: Client, message: Message):
     doc  = message.document
     name = (doc.file_name or "").lower()
+    mime = getattr(doc, "mime_type", "") or ""
 
-    # Let video handler take video documents
-    if any(name.endswith(ext) for ext in [".mp4", ".mkv", ".avi", ".webm", ".mov", ".m4v"]):
+    # Route video-type documents to video menu
+    is_video = (
+        mime in VIDEO_MIME or
+        any(name.endswith(ext) for ext in VIDEO_EXTS)
+    )
+    if is_video:
+        from handlers.video import video_menu_kb
+        await message.reply_text(
+            f"🎬 <b>Video detected:</b> <code>{doc.file_name or 'video'}</code>\n\n"
+            "Choose what you want to do with this video:",
+            reply_markup=video_menu_kb(doc.file_id),
+            reply_to_message_id=message.id,
+        )
         return
 
     doc_type = "generic"
