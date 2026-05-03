@@ -34,7 +34,19 @@ def url_menu_kb(url: str, url_type: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(rows)
 
 
-@app.on_message(filters.regex(URL_REGEX) | filters.regex(MAGNET_RE))
+@app.on_message(
+    (filters.regex(URL_REGEX) | filters.regex(MAGNET_RE))
+    & filters.private
+    & ~filters.command([
+        "start", "help", "about", "info", "stats", "broadcast",
+        "ban", "unban", "settings", "cancel", "mirror", "leech",
+        "status", "session", "m", "l", "ytdl", "torrent", "gdl",
+        "mega", "nzb", "jd", "tgleech", "bulk_url", "upload",
+        "gdrive", "rclone", "gofile", "pixeldrain", "buzzheavier", "ytvideo",
+        "cancelall",
+    ]),
+    group=1,
+)
 async def url_handler(client: Client, message: Message):
     text = message.text or message.caption or ""
 

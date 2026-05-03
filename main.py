@@ -65,6 +65,15 @@ async def on_start():
     me = await app.get_me()
     logger.info(f"🚀 Mirror Nexus Bot started as @{me.username} (id={me.id})")
     logger.info(f"👷 Workers: {Config.WORKERS}")
+    logger.info(f"👑 Owner ID: {Config.OWNER_ID}")
+
+    # Log FSUB config
+    fsub_channels = [c for c in [Config.FSUB_CHANNEL_1, Config.FSUB_CHANNEL_2] if c]
+    if fsub_channels:
+        logger.info(f"📢 FSUB Channels: {fsub_channels}")
+    else:
+        logger.info("📢 No FSUB channels configured — all users can access bot freely")
+
     if Config.IS_HEROKU:
         logger.info(f"☁️ Running on Heroku (PORT={Config.PORT})")
 
@@ -79,8 +88,8 @@ async def on_start():
             f"🗄 DB: Connected"
             f"{deploy_info}",
         )
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"⚠️ Could not notify owner: {e}")
 
 
 # ── Run ────────────────────────────────────────────────────────────────────────

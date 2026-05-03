@@ -23,13 +23,23 @@ BOT_START_TIME = time.time()
 # ── Force Subscribe Check ──────────────────────────────────────────────────────
 async def is_subscribed(client: Client, user_id: int) -> bool:
     channels = [c for c in [Config.FSUB_CHANNEL_1, Config.FSUB_CHANNEL_2] if c]
+    if not channels:
+        return True  # No FSUB channels configured — allow everyone
+    # Admins always pass
+    if Config.is_admin(user_id):
+        return True
     for channel in channels:
         try:
             member = await client.get_chat_member(channel, user_id)
             if member.status.value in ("left", "banned", "restricted"):
                 return False
-        except Exception:
-            return False
+        except Exception as e:
+            import logging
+            logging.getLogger("MirrorNexus").warning(
+                f"⚠️ FSUB check failed for channel={channel}, user={user_id}: {e} — allowing access"
+            )
+            # Don't block users when the bot can't verify (bot not admin, channel deleted, etc.)
+            continue
     return True
 
 
