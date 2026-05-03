@@ -34,10 +34,12 @@ except Exception as e:
     logger.warning(f"⚠️ aria2c not available: {e} — direct downloads disabled")
 
 
-# ── Debug: Log all messages (group=-1 = runs first, then propagates) ──────────
-@app.on_message(_filters.private & ~_filters.service, group=-1)
-async def debug_log(client, message):
-    logger.info(f"📩 Received message from {message.from_user.id}: {message.text or '[Media]'}")
+# ── Global Message Logger ──────────────────────────────────────────────────────
+@app.on_message(group=-100)
+async def global_logger(client, message):
+    user_id = message.from_user.id if message.from_user else "Unknown"
+    text    = (message.text or message.caption or "Media").replace("\n", " ")
+    logger.info(f"📩 INCOMING: [{user_id}] -> {text[:50]}")
     message.continue_propagation()
 
 
@@ -66,6 +68,10 @@ async def on_start():
     logger.info(f"🚀 Mirror Nexus Bot started as @{me.username} (id={me.id})")
     logger.info(f"👷 Workers: {Config.WORKERS}")
     logger.info(f"👑 Owner ID: {Config.OWNER_ID}")
+
+    # Check handlers count
+    total_handlers = sum(len(h) for h in app.dispatcher.groups.values())
+    logger.info(f"🛠 Dispatcher: {total_handlers} handlers registered in {len(app.dispatcher.groups)} groups")
 
     # Log FSUB config
     fsub_channels = [c for c in [Config.FSUB_CHANNEL_1, Config.FSUB_CHANNEL_2] if c]
